@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import LoginPage from './pages/LoginPage';
-import TodosPedidosPage from './pages/TodosPedidos';
+import ClientsPage from './pages/ClientsPage';
 
 import './App.css'
 
@@ -27,8 +27,8 @@ function App() {
         />
 
         <Route
-        path='/'
-        element={user ? <TodosPedidosPage/> : <Navigate to='/login' replace/>}
+          path='/clients'
+          element={<ClientsPage/>}
         />
       </Routes>
     </BrowserRouter>
