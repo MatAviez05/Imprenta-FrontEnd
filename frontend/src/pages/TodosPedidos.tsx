@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import '../pages/css/PedidosPage.css'
 
 interface Pedido{
     _id:number
@@ -18,7 +19,8 @@ interface Pedido{
 const initialMockPedidos:Pedido[] = [
     {_id:1, id_cliente:1, tipo_trabajo:'Oficina', cantidad:10, tamaño:'Grande', color:'Rojo', tipo_papel:'Fino', estado:'Proceso', observaciones:'-', estado_pago:'Sin Pagar'},
     {_id:2, id_cliente:8, tipo_trabajo:'Granadero', cantidad:15, tamaño:'Medio', color:'Azul', tipo_papel:'Grueso', estado:'Terminado', observaciones:'desgastado pero sirve', estado_pago:'Pagado'},
-    {_id:3, id_cliente:6, tipo_trabajo:'Programador', cantidad:11, tamaño:'Pequeño', color:'Gris', tipo_papel:'Normal', estado:'Pendiente', observaciones:'-', estado_pago:'Sin Pagar'}
+    {_id:3, id_cliente:6, tipo_trabajo:'Programador', cantidad:11, tamaño:'Pequeño', color:'Gris', tipo_papel:'Normal', estado:'Pendiente', observaciones:'-', estado_pago:'Sin Pagar'},
+    {_id:4, id_cliente:2, tipo_trabajo:'Kiosquero', cantidad:18, tamaño:'Medio', color:'Verde', tipo_papel:'Normal', estado:'Proceso', observaciones:'-', estado_pago:'Sin Pagar'}
 ]
 
 
@@ -101,8 +103,8 @@ function TodosPedidosPage(){
                         <h3>No hay pedidos registrados</h3>
                     </div>
                 ) : (
-                    <div className='pedidos-table-conteiner'>
-                        <table>
+                    <div className='list-wrapper'>
+                        <table className='data-table'>
                             <thead>
                                 <tr>
                                     <th>ID Pedido</th>
