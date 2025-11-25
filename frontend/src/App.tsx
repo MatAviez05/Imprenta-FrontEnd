@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import LoginPage from './pages/LoginPage';
 import ClientsPage from './pages/ClientsPage';
+import TodosPedidosPage from './pages/TodosPedidos';
 
 import './App.css'
 
@@ -23,7 +24,12 @@ function App() {
       <Routes>
         <Route
         path='/login'
-        element={user ? <Navigate to='/' replace/> : <LoginPage/>}
+        element={<LoginPage/>}
+        />
+
+        <Route
+        path='/all-pedidos'
+        element={<TodosPedidosPage/>}
         />
 
         <Route
