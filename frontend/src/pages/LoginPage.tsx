@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 function LoginPage(){
 
@@ -11,9 +12,23 @@ function LoginPage(){
 
     const navigate = useNavigate();
 
+    const { login } = useAuth()
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        //Esperar al contexto este implementado
+        
+        setError('')
+        setIsLoading(true)
+        try{
+            await login(email, password)
+
+            navigate('/')
+
+        }catch(err:any){
+            setError(err.message || 'Error al iniciar sesión');
+        }finally{
+            setIsLoading(false)
+        }
     }
 
     return(
