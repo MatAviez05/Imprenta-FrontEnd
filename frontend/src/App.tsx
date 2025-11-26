@@ -3,6 +3,7 @@ import { useAuth } from './context/AuthContext';
 import LoginPage from './pages/LoginPage';
 import ClientsPage from './pages/ClientsPage';
 import TodosPedidosPage from './pages/TodosPedidos';
+import HomePage from './pages/HomePage';
 
 import './App.css'
 
@@ -10,7 +11,7 @@ import './App.css'
 function App() {
   const { user, isLoading } = useAuth()
 
-  if(isLoading){
+  if (isLoading) {
     return (
       <div className="loading-screen">
         <h2>Cargando...</h2>
@@ -23,18 +24,22 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route
-        path='/login'
-        element={<LoginPage/>}
+          path="/"
+          element={<HomePage/>}
+        />
+        <Route
+          path='/login'
+          element={<LoginPage />}
         />
 
         <Route
-        path='/all-pedidos'
-        element={<TodosPedidosPage/>}
+          path='/all-pedidos'
+          element={<TodosPedidosPage />}
         />
 
         <Route
           path='/clients'
-          element={<ClientsPage/>}
+          element={<ClientsPage />}
         />
       </Routes>
     </BrowserRouter>
