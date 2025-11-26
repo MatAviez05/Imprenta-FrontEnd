@@ -24,22 +24,22 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route
-          path="/"
-          element={<HomePage/>}
+          path="/login"
+          element={user ? <Navigate to='/' replace/> : <LoginPage/>}
         />
         <Route
-          path='/login'
-          element={<LoginPage />}
+          path='/'
+          element={user ? <HomePage /> : <Navigate to="/login" replace />}
         />
 
         <Route
-          path='/all-pedidos'
-          element={<TodosPedidosPage />}
+          path='/pedidos'
+          element={user ? <TodosPedidosPage /> : <Navigate to="/login" replace />}
         />
 
         <Route
           path='/clients'
-          element={<ClientsPage />}
+          element={user ? <ClientsPage /> : <Navigate to="/login" replace />}
         />
       </Routes>
     </BrowserRouter>

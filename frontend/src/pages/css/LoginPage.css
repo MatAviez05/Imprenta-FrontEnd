@@ -1,0 +1,102 @@
+/* --- Contenedor Principal (Centrado perfecto) --- */
+.login-conteiner {
+    min-height: 100vh;
+    display: flex;
+    align-items: center; /* Centrado vertical */
+    justify-content: center; /* Centrado horizontal */
+    background-color: #f8f9fa; /* Mismo gris de fondo que la otra página */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    padding: 20px; /* Para que no toque los bordes en celulares */
+}
+
+/* --- Tarjeta de Login --- */
+.login-card {
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    width: 100%;
+    max-width: 400px; /* Ancho máximo para que no se estire demasiado */
+    text-align: center;
+}
+
+.login-card h1 {
+    font-size: 1.5rem;
+    color: #343a40;
+    margin-bottom: 30px; /* Separación con el formulario */
+    font-weight: 600;
+}
+
+/* --- Grupos del Formulario --- */
+.form-group {
+    margin-bottom: 20px;
+    text-align: left; /* Alineamos etiquetas e inputs a la izquierda */
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #495057;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+/* --- Inputs --- */
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: #f8f8f8;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    box-sizing: border-box; /* Asegura que el padding no rompa el ancho */
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Efecto glow azul al escribir */
+}
+
+.form-group input:disabled {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+}
+
+/* --- Mensaje de Error (Reutilizado) --- */
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    border: 1px solid #f5c6cb;
+    text-align: left;
+}
+
+/* --- Botón de Acción (Primary) --- */
+.btn-primary {
+    width: 100%; /* Botón ancho completo */
+    padding: 12px;
+    background-color: #007bff; /* Mismo azul que usaste antes */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 10px;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: #0056b3; /* Azul más oscuro al pasar mouse */
+}
+
+.btn-primary:disabled {
+    background-color: #6c757d; /* Gris cuando está cargando */
+    cursor: wait;
+    opacity: 0.65;
+}
