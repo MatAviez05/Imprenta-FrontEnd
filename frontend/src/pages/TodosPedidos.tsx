@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { PedidoForm } from '../components/PedidoForm';
 import '../pages/css/PedidosPage.css'
 
 interface Pedido{
@@ -16,6 +17,8 @@ interface Pedido{
     estado_pago: string
 }
 
+type PedidoFormData = Omit<Pedido, '_id'> & { _id?: number };
+
 const initialMockPedidos:Pedido[] = [
     {_id:1, id_cliente:1, tipo_trabajo:'Oficina', cantidad:10, tamaño:'Grande', color:'Rojo', tipo_papel:'Fino', estado:'Proceso', observaciones:'-', estado_pago:'Sin Pagar'},
     {_id:2, id_cliente:8, tipo_trabajo:'Granadero', cantidad:15, tamaño:'Medio', color:'Azul', tipo_papel:'Grueso', estado:'Terminado', observaciones:'desgastado pero sirve', estado_pago:'Pagado'},
@@ -30,6 +33,8 @@ function TodosPedidosPage(){
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
 
+    const [searchTerm, setSearchTerm] = useState('');
+    const [editingPedido, setEditingPedido] = useState<Pedido | null>(null);
 
     const navigate = useNavigate()
 
@@ -45,6 +50,25 @@ function TodosPedidosPage(){
         };
         fetchClientsMock();
     }, []);
+
+    const handleAlta = () => {
+        setEditingPedido({
+            _id: 0, // 0 indica que es nuevo (temporal)
+            id_cliente: 0,
+            tipo_trabajo: '',
+            cantidad: 1,
+            tamaño: '',
+            color: '',
+            tipo_papel: '',
+            estado: 'Pendiente',
+            observaciones: '',
+            estado_pago: 'Pendiente'
+        } as Pedido);
+    };
+
+    const handleEdit = (pedido: Pedido) => {
+        setEditingPedido(pedido);
+    };
 
     const handleLogout = () => {
         logout();
@@ -68,7 +92,51 @@ function TodosPedidosPage(){
         }
     };
 
-    if (isLoading && pedidos.length === 0) {
+    const handleSave = async (pedidoData: PedidoFormData) => {
+        setError('');
+        try {
+            await new Promise(resolve => setTimeout(resolve, 750)); // Simula delay de API
+
+            if (pedidoData._id) {
+                // MODO EDICIÓN
+                const updatedPedido = pedidoData as Pedido;
+                setPedidos(prev => prev.map(p => p._id === updatedPedido._id ? updatedPedido : p));
+            } else {
+                // MODO ALTA (Crear ID numérico)
+                // Buscamos el ID más alto actual y sumamos 1
+                const maxId = pedidos.length > 0 ? Math.max(...pedidos.map(p => p._id)) : 0;
+                
+                const newPedido: Pedido = {
+                    ...pedidoData,
+                    _id: maxId + 1 
+                } as Pedido;
+                
+                setPedidos(prev => [...prev, newPedido]);
+            }
+            
+            setEditingPedido(null); // Cerrar modal
+        } catch (err) {
+            console.error('Error', err);
+            setError('No se pudo guardar el pedido.');
+        }
+    };
+
+    const handleCancel = () => {
+        setEditingPedido(null);
+    };
+
+    const filteredPedidos = (() => {
+        if (!searchTerm) return pedidos;
+        const lowerCaseSearch = searchTerm.toLowerCase();
+        // Filtramos por Tipo de Trabajo o Estado (puedes agregar más campos)
+        return pedidos.filter(pedido =>
+            pedido.tipo_trabajo.toLowerCase().includes(lowerCaseSearch) ||
+            pedido.estado.toLowerCase().includes(lowerCaseSearch) ||
+            pedido.id_cliente.toString().includes(lowerCaseSearch) // Búsqueda por ID cliente también
+        );
+    })();
+
+    if (isLoading && pedidos.length === 0 && !editingPedido) {
         return (
             <div className="clients-page-container loading-container">
                 <p>Cargando lista de clientes...</p>
@@ -78,6 +146,13 @@ function TodosPedidosPage(){
 
     return(
         <div className='todos-pedidos-conteiner'>
+            {editingPedido && (
+                <PedidoForm
+                    initialData={editingPedido._id ? editingPedido : null}
+                    onSave={handleSave}
+                    onCancel={handleCancel}
+                />
+            )}
             <nav className="navbar">
                 <div className="navbar-content">
                     <h2>Imprenta - Gestion de Clientes</h2>
@@ -94,6 +169,9 @@ function TodosPedidosPage(){
             <div className='page-content'>
                 <div className='page-header'>
                     <h1>Todos los Pedidos registrados</h1>
+                    <button className="btn-primary-link" onClick={handleAlta} disabled={isLoading || !!editingPedido}>
+                        Nuevo Pedido
+                    </button>
                 </div>
 
                 {error && <div className="error-message">{error}</div>}
@@ -104,6 +182,16 @@ function TodosPedidosPage(){
                     </div>
                 ) : (
                     <div className='list-wrapper'>
+                        <div className="list-toolbar">
+                            <input
+                                type="text"
+                                placeholder="Buscar por Tipo, Estado o ID Cliente..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="search-input"
+                                disabled={isLoading || !!editingPedido}
+                            />
+                        </div>
                         <table className='data-table'>
                             <thead>
                                 <tr>
@@ -133,7 +221,11 @@ function TodosPedidosPage(){
                                         <td>{pedido.observaciones}</td>
                                         <td>{pedido.estado_pago}</td>
                                         <td>
-                                            <button className='btn-cancelar' onClick={() => handleDelete(pedido._id)}>
+                                            <button className="btn-link" onClick={() => handleEdit(pedido)} disabled={isLoading || !!editingPedido}>
+                                                    Modificar
+                                            </button>
+                                            {' | '}
+                                            <button className='btn-link text-danger' onClick={() => handleDelete(pedido._id)} disabled={isLoading || !!editingPedido}>
                                                 Eliminar
                                             </button>
                                         </td>
@@ -141,6 +233,7 @@ function TodosPedidosPage(){
                                 ))}
                             </tbody>
                         </table>
+                        {filteredPedidos.length === 0 && !isLoading && <p className='text-center'>No hay resultados para "{searchTerm}"</p>}
                     </div>
                 )}
             </div>

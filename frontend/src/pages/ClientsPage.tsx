@@ -157,8 +157,8 @@ function ClientsPage() {
                 <div className="navbar-content">
                     <h2>Imprenta - Gestion de Clientes</h2>
                     <div className="navbar-right">
-                        <Link to="/dashboard" className="btn-back">
-                            Volver al Dashboard
+                        <Link to="/" className="btn-back">
+                            Volver al Menu
                         </Link>
                         <button onClick={handleLogout} className="btn-logout">
                             Cerrar Sesión
