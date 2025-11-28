@@ -81,7 +81,7 @@ git clone <URL_REPOSITORIO>
 
 2. Entrar a la carpeta del backend
 ```bash
-cd fronemd
+cd frontend
 ```
 
 3. Instalar dependecias
