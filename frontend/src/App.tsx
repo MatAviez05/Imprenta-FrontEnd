@@ -4,6 +4,7 @@ import LoginPage from './pages/LoginPage';
 import ClientsPage from './pages/ClientsPage';
 import TodosPedidosPage from './pages/TodosPedidos';
 import HomePage from './pages/HomePage';
+import ReportsPage from './pages/ReportsPage';
 
 import './App.css'
 
@@ -27,6 +28,7 @@ function App() {
           path="/login"
           element={user ? <Navigate to='/' replace/> : <LoginPage/>}
         />
+        
         <Route
           path='/'
           element={user ? <HomePage /> : <Navigate to="/login" replace />}
@@ -41,6 +43,17 @@ function App() {
           path='/clients'
           element={user ? <ClientsPage /> : <Navigate to="/login" replace />}
         />
+
+        <Route
+          path="/reportes"
+          element={<ReportsPage/>}
+        />
+
+        <Route
+          path="/facturacion"
+        /*  element={<FacturacionPage />} */
+        />
+
       </Routes>
     </BrowserRouter>
   )
