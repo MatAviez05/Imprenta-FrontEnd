@@ -9,6 +9,7 @@
 - [Tecnologias a utilizadas](#tecnologias-a-utilizar)
 - [Construccion e inicializacion del proyecto del proyecto](#construccion-e-inicializacion-del-proyecto-del-proyecto)
 - [Integrantes del grupo de proyecto](#integrantes-del-proyecto)
+- [Metodos para acceder al Frontend](#metodos-para-acceder-al-frontend)
 
 ## Informacion Del Proyecto
 
@@ -96,7 +97,11 @@ npm run dev
 
 ---
 
-### URL para acceder al FrontEnd: `http://localhost:5173`
+## Metodos para acceder al FrontEnd
+
+### URL para acceder al FrontEnd de manera local: http://localhost:5173
+
+### URL para acceder al FrontEnd deployado en Render: https://imprenta-frontend-75va.onrender.com/
 
 ## Credenciales para Iniciar Sesion
 
