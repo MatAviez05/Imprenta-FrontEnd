@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { PedidoForm } from '../components/PedidoForm';
 import '../pages/css/PedidosPage.css'
@@ -36,7 +36,7 @@ function TodosPedidosPage(){
     const [searchTerm, setSearchTerm] = useState('');
     const [editingPedido, setEditingPedido] = useState<Pedido | null>(null);
 
-    const navigate = useNavigate()
+    //const navigate = useNavigate()
 
     const { logout } = useAuth()
 

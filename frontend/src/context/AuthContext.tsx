@@ -21,7 +21,7 @@ interface AuthContextType {
 
 // Claves 
 const TOKEN_KEY = 'authToken';
-const USER_KEY = 'authUser';
+//const USER_KEY = 'authUser';
 
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
