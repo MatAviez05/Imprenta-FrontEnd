@@ -96,7 +96,12 @@ npm run dev
 
 ---
 
-### **Base URL:** `http://localhost:5173`
+### URL para acceder al FrontEnd: `http://localhost:5173`
+
+## Credenciales para Iniciar Sesion
+
+-  Correo: admin@imprenta.com
+-  Contraseña: 123456
 
 ## Integrantes del Proyecto:
 
