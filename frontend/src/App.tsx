@@ -5,6 +5,7 @@ import ClientsPage from './pages/ClientsPage';
 import TodosPedidosPage from './pages/TodosPedidos';
 import HomePage from './pages/HomePage';
 import ReportsPage from './pages/ReportsPage';
+import FacturacionPage from './pages/FacturacionPage';
 
 import './App.css'
 
@@ -46,12 +47,12 @@ function App() {
 
         <Route
           path="/reportes"
-          element={<ReportsPage/>}
+          element={user ? <ReportsPage /> : <Navigate to="/login" replace />}
         />
 
         <Route
           path="/facturacion"
-        /*  element={<FacturacionPage />} */
+          element={user ? <FacturacionPage /> : <Navigate to="/login" replace />}
         />
 
       </Routes>

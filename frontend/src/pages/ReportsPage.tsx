@@ -63,7 +63,7 @@ function ReportsPage() {
                     <h2>Imprenta - Modulo de Reportes</h2>
                     <div className="navbar-right">
                         <Link to="/" className="btn-back">
-                            Volver a HomePage
+                            Volver al Menu
                         </Link>
                         <button onClick={handleLogout} className="btn-logout">
                             Cerrar Sesión
