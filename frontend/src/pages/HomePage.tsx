@@ -11,19 +11,21 @@ function DashboardPage() {
 
     return (
         <div className="home-container">
-            <nav className="navbar">
-                <div className="navbar-content">
-                    <h2>
-                        Imprenta - Sistema de Gestión
-                    </h2>
-                    <div className="navbar-right">
-                        <span className="user-greeting">Hola, {user?.nombre || user?.email}</span>
-                        <button onClick={handleLogout} className="btn-logout">
-                            Cerrar Sesión
-                        </button>
+            <header>
+                <nav className="navbar">
+                    <div className="navbar-content">
+                        <h2>
+                            Imprenta - Sistema de Gestión
+                        </h2>
+                        <div className="navbar-right">
+                            <span className="user-greeting">Hola, {user?.nombre || user?.email}</span>
+                            <button onClick={handleLogout} className="btn-logout">
+                                Cerrar Sesión
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </nav>
+                </nav>
+            </header>
 
             {/*Contenido Principal*/}
             <div className="home-content">
@@ -71,6 +73,18 @@ function DashboardPage() {
                     </div>
                 </div>
             </div>
+            <nav className="footer-contenedor">
+                <footer>
+                    <small>
+                        <a href="mailto:ramirogabeiras1998@gmail.com" target="_blank">Gabeiras Ramiro - </a>
+                        <a href="mailto:juanbraun45@gmail.com" target="_blank">Juan Andrés Braun - </a>
+                        <a href="mailto:baezavilamateo@gmail.com" target="_blank">Mateo Avila Baez - </a>
+                        <a href="mailto:lautacb@gmail.com" target="_blank">Laurato Carrio</a>
+                    </small>
+                    <br></br>
+                    &copy; copyright reserved
+                </footer>
+            </nav>
         </div>
     );
 }

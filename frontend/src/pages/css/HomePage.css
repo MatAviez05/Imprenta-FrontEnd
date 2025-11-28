@@ -148,3 +148,51 @@
     font-size: 0.9rem;
     color: #6c757d;
 }
+
+/* --- Contenedor del Footer --- */
+.footer-contenedor {
+    /* Fondo oscuro para que coincida con el navbar */
+    background-color: #343a40; 
+    padding: 15px 40px;
+    color: white; /* Color de texto claro */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    text-align: center; /* Centra el contenido del footer */
+    /* Lo fijamos en la parte inferior para que siempre esté visible o al final del contenido */
+    /* position: fixed; 
+    bottom: 0;
+    width: 100%; */ 
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil hacia arriba */
+}
+
+/* --- Estilos del Elemento Footer (El contenido interno) --- */
+.footer-contenedor footer {
+    max-width: 1200px;
+    margin: 0 auto;
+    font-size: 0.9rem; /* Un poco más pequeño que el texto principal */
+    line-height: 1.6;
+}
+
+/* --- Estilos del Texto Pequeño (small) --- */
+.footer-contenedor small {
+    display: block; /* Asegura que la línea de enlaces ocupe su propio espacio */
+    margin-bottom: 5px;
+}
+
+/* --- Estilos de los Enlaces (a) --- */
+.footer-contenedor a {
+    color: #adb5bd; /* Un gris claro para los enlaces, sutil */
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-contenedor a:hover {
+    color: #ffffff; /* Blanco puro al pasar el ratón para destacar */
+    text-decoration: underline; /* Subrayado al pasar el ratón */
+}
+
+/* --- Estilos para el Salto de Línea y Copyright --- */
+/* Estiliza la línea del copyright */
+.footer-contenedor footer > *:last-child {
+    font-size: 0.85rem;
+    color: #6c757d; /* Gris más oscuro para el texto de copyright */
+}

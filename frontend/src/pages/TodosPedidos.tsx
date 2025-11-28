@@ -153,19 +153,21 @@ function TodosPedidosPage(){
                     onCancel={handleCancel}
                 />
             )}
-            <nav className="navbar">
-                <div className="navbar-content">
-                    <h2>Imprenta - Gestion de Clientes</h2>
-                    <div className="navbar-right">
-                        <Link to="/" className="btn-back">
-                            Volver al Menu
-                        </Link>
-                        <button onClick={handleLogout}className="btn-logout">
-                            Cerrar Sesión
-                        </button>
+            <header>
+                <nav className="navbar">
+                    <div className="navbar-content">
+                        <h2>Imprenta - Gestion de Clientes</h2>
+                        <div className="navbar-right">
+                            <Link to="/" className="btn-back">
+                                Volver al Menu
+                            </Link>
+                            <button onClick={handleLogout}className="btn-logout">
+                                Cerrar Sesión
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </nav>
+                </nav>
+            </header>
             <div className='page-content'>
                 <div className='page-header'>
                     <h1>Todos los Pedidos registrados</h1>
@@ -237,6 +239,18 @@ function TodosPedidosPage(){
                     </div>
                 )}
             </div>
+            <nav className="footer-contenedor">
+                <footer>
+                    <small>
+                        <a href="mailto:ramirogabeiras1998@gmail.com" target="_blank">Gabeiras Ramiro - </a>
+                        <a href="mailto:juanbraun45@gmail.com" target="_blank">Juan Andrés Braun - </a>
+                        <a href="mailto:baezavilamateo@gmail.com" target="_blank">Mateo Avila Baez - </a>
+                        <a href="mailto:lautacb@gmail.com" target="_blank">Laurato Carrio</a>
+                    </small>
+                    <br></br>
+                    &copy; copyright reserved
+                </footer>
+            </nav>
         </div>
     )
 }
