@@ -1,0 +1,198 @@
+
+.home-container {
+    min-height: 100vh;
+    background-color: #f8f9fa; 
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.navbar {
+    background-color: #343a40; 
+    padding: 15px 40px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: white;
+}
+
+.navbar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.navbar-content h2 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 500;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-greeting {
+    font-size: 0.95rem;
+    opacity: 0.9;
+}
+
+.btn-logout {
+    background: #dc3545; 
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.1s;
+}
+
+.btn-logout:hover {
+    background-color: #c82333;
+}
+
+
+.home-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.welcome-title {
+    font-size: 2rem;
+    color: #343a40;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+.user-info-card {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    border: 1px solid #dee2e6;
+}
+
+.user-badge {
+    display: flex;
+    align-items: center;
+}
+
+.badge-text {
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: #007bff;
+    background: #eaf3ff;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.user-email {
+    font-size: 0.9rem;
+    color: #555;
+    margin: 0;
+}
+
+
+.actions-section {
+    padding-bottom: 40px;
+}
+
+.section-title {
+    font-size: 1.6rem;
+    color: #343a40;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 10px;
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+}
+
+.action-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    border-left: 5px solid #007bff;
+    transition: transform 0.2s, box-shadow 0.2s;
+    height: 100%;
+}
+
+.action-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.action-card h3 {
+    margin: 5px 0 5px 0;
+    font-size: 1.15rem;
+    color: #343a40;
+}
+
+.action-card p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+/* --- Contenedor del Footer --- */
+.footer-contenedor {
+    /* Fondo oscuro para que coincida con el navbar */
+    background-color: #343a40; 
+    padding: 15px 40px;
+    color: white; /* Color de texto claro */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    text-align: center; /* Centra el contenido del footer */
+    /* Lo fijamos en la parte inferior para que siempre esté visible o al final del contenido */
+    /* position: fixed; 
+    bottom: 0;
+    width: 100%; */ 
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil hacia arriba */
+}
+
+/* --- Estilos del Elemento Footer (El contenido interno) --- */
+.footer-contenedor footer {
+    max-width: 1200px;
+    margin: 0 auto;
+    font-size: 0.9rem; /* Un poco más pequeño que el texto principal */
+    line-height: 1.6;
+}
+
+/* --- Estilos del Texto Pequeño (small) --- */
+.footer-contenedor small {
+    display: block; /* Asegura que la línea de enlaces ocupe su propio espacio */
+    margin-bottom: 5px;
+}
+
+/* --- Estilos de los Enlaces (a) --- */
+.footer-contenedor a {
+    color: #adb5bd; /* Un gris claro para los enlaces, sutil */
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-contenedor a:hover {
+    color: #ffffff; /* Blanco puro al pasar el ratón para destacar */
+    text-decoration: underline; /* Subrayado al pasar el ratón */
+}
+
+/* --- Estilos para el Salto de Línea y Copyright --- */
+/* Estiliza la línea del copyright */
+.footer-contenedor footer > *:last-child {
+    font-size: 0.85rem;
+    color: #6c757d; /* Gris más oscuro para el texto de copyright */
+}

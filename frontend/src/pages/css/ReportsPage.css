@@ -1,0 +1,199 @@
+
+:root {
+    --color-primary: #007bff;        
+    --color-navbar-bg: #343a40;     
+    --color-background: #f8f9fa;     
+    --color-border: #dee2e6;         
+}
+
+
+.reports-page-container {
+    min-height: 100vh;
+    background-color: var(--color-background);
+}
+
+.reports-page-container .navbar {
+    background-color: var(--color-navbar-bg); 
+    padding: 15px 40px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: white;
+}
+
+.reports-page-container .navbar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+
+.page-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+.page-header {
+    margin-bottom: 30px;
+}
+
+.page-header h1 {
+    font-size: 1.8rem;
+    color: var(--color-navbar-bg);
+}
+
+
+.reports-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr; 
+    gap: 30px;
+}
+
+.reports-grid .report-card {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--color-border);
+}
+
+.reports-grid .full-width {
+    grid-column: 1 / -1; 
+}
+
+.report-card h3 {
+    font-size: 1.25rem;
+    color: var(--color-primary);
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.data-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.data-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.item-label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 0.95rem;
+    color: black
+}
+
+.progress-bar-container {
+    height: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    transition: width 0.5s ease;
+}
+
+.monthly-chart {
+    display: flex;
+    align-items: flex-end; 
+    height: 200px;
+    gap: 10px;
+    padding-top: 20px;
+}
+
+.chart-bar-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+    height: 100%;
+    justify-content: flex-end;
+}
+
+.chart-bar {
+    width: 80%;
+    background-color: var(--color-primary);
+    border-radius: 3px 3px 0 0;
+    transition: height 0.5s ease;
+    margin-bottom: 5px;
+}
+
+.chart-label {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+
+.annual-box {
+    text-align: center;
+    padding: 40px 0;
+}
+
+.annual-figure {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-navbar-bg);
+    margin: 0;
+}
+
+.summary-text {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* --- Contenedor del Footer --- */
+.footer-contenedor {
+    /* Fondo oscuro para que coincida con el navbar */
+    background-color: #343a40; 
+    padding: 15px 40px;
+    color: white; /* Color de texto claro */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    text-align: center; /* Centra el contenido del footer */
+    /* Lo fijamos en la parte inferior para que siempre esté visible o al final del contenido */
+    /* position: fixed; 
+    bottom: 0;
+    width: 100%; */ 
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil hacia arriba */
+}
+
+/* --- Estilos del Elemento Footer (El contenido interno) --- */
+.footer-contenedor footer {
+    max-width: 1200px;
+    margin: 0 auto;
+    font-size: 0.9rem; /* Un poco más pequeño que el texto principal */
+    line-height: 1.6;
+}
+
+/* --- Estilos del Texto Pequeño (small) --- */
+.footer-contenedor small {
+    display: block; /* Asegura que la línea de enlaces ocupe su propio espacio */
+    margin-bottom: 5px;
+}
+
+/* --- Estilos de los Enlaces (a) --- */
+.footer-contenedor a {
+    color: #adb5bd; /* Un gris claro para los enlaces, sutil */
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-contenedor a:hover {
+    color: #ffffff; /* Blanco puro al pasar el ratón para destacar */
+    text-decoration: underline; /* Subrayado al pasar el ratón */
+}
+
+/* --- Estilos para el Salto de Línea y Copyright --- */
+/* Estiliza la línea del copyright */
+.footer-contenedor footer > *:last-child {
+    font-size: 0.85rem;
+    color: #6c757d; /* Gris más oscuro para el texto de copyright */
+}
