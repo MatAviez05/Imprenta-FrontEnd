@@ -88,8 +88,20 @@ function TodosPedidosPage(){
         setError('');
         setIsLoading(true); 
         try {
-            await new Promise(resolve => setTimeout(resolve, 500)); 
-            setPedidos(prev => prev.filter(pedido => pedido._id !== id));
+            const response = await fetch(`http://localhost:3000/api/pedidos/${id}`, {
+
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `${token}`
+                }
+            })
+
+            if (!response.ok){
+                throw new Error('No se pudo eliminar el cliente')
+            }
+
+            setPedidos(prev => prev.filter(pedido => pedido._id === id))
+            
         } catch (err) {
             console.error('Error', err);
             setError('No se pudo eliminar.');
@@ -140,7 +152,7 @@ function TodosPedidosPage(){
             }
             
             setEditingPedido(null); // Cerrar modal
-            
+
         } catch (err) {
             console.error('Error', err);
             setError('No se pudo guardar el pedido.');

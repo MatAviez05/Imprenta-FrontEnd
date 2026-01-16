@@ -154,7 +154,7 @@ function ClientsPage() {
         logout();
     };
 
-    // Filtrado de clientes
+    // Filtrado de Pedidos
     const filteredClients = (() => {
         if (!searchTerm) return clients;
         const lowerCaseSearch = searchTerm.toLowerCase();
