@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import './PedidoForm.css'
 
 export interface Pedido {
-    _id: number;
+    id?: number,
+    _id?: number;
     id_cliente: number;
     tipo_trabajo: string;
     cantidad: number;
@@ -54,11 +55,8 @@ export const PedidoForm: React.FC<PedidoFormProps> = ({ initialData, onSave, onC
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
+        
         e.preventDefault();
-        if (!formData.tipo_trabajo || formData.cantidad <= 0 || !formData.id_cliente) {
-            alert("Por favor completa el tipo de trabajo, una cantidad válida y el ID del cliente.");
-            return;
-        }
 
         setIsSubmitting(true);
         try {

@@ -19,14 +19,6 @@ interface Pedido{
 
 type PedidoFormData = Omit<Pedido, '_id'> & { _id?: number };
 
-const initialMockPedidos:Pedido[] = [
-    {_id:1, id_cliente:1, tipo_trabajo:'Oficina', cantidad:10, tamaño:'Grande', color:'Rojo', tipo_papel:'Fino', estado:'Proceso', observaciones:'-', estado_pago:'Sin Pagar'},
-    {_id:2, id_cliente:8, tipo_trabajo:'Granadero', cantidad:15, tamaño:'Medio', color:'Azul', tipo_papel:'Grueso', estado:'Terminado', observaciones:'desgastado pero sirve', estado_pago:'Pagado'},
-    {_id:3, id_cliente:6, tipo_trabajo:'Programador', cantidad:11, tamaño:'Pequeño', color:'Gris', tipo_papel:'Normal', estado:'Pendiente', observaciones:'-', estado_pago:'Sin Pagar'},
-    {_id:4, id_cliente:2, tipo_trabajo:'Kiosquero', cantidad:18, tamaño:'Medio', color:'Verde', tipo_papel:'Normal', estado:'Proceso', observaciones:'-', estado_pago:'Sin Pagar'}
-]
-
-
 function TodosPedidosPage(){
 
     const [pedidos, setPedidos] = useState<Pedido[]>([]);
@@ -38,15 +30,29 @@ function TodosPedidosPage(){
 
     //const navigate = useNavigate()
 
-    const { logout } = useAuth()
+    const { token, logout } = useAuth()
 
     useEffect(() => {
         const fetchClientsMock = async () => {
             setIsLoading(true);
             setError('');
-            await new Promise(resolve => setTimeout(resolve, 500)); 
-            setPedidos(initialMockPedidos);
-            setIsLoading(false);
+            try{
+                const response = await fetch('http://localhost:3000/api/pedidos', {
+                    headers: {
+                        'Authorization': `${token}`
+                    }
+                })
+
+                setPedidos(await response.json())
+                setError('')
+            }catch(error:any){
+                console.error('Error al cargar todos los clientes:', error);
+                if (error.response?.status !== 401) { 
+                    setError('No se pudieron cargar todos los clientes. Por favor intenta más tarde.');
+                }
+            }finally{
+                setIsLoading(false)
+            }
         };
         fetchClientsMock();
     }, []);
@@ -95,26 +101,46 @@ function TodosPedidosPage(){
     const handleSave = async (pedidoData: PedidoFormData) => {
         setError('');
         try {
-            await new Promise(resolve => setTimeout(resolve, 750)); // Simula delay de API
+            const isEditMode = !!pedidoData._id
 
-            if (pedidoData._id) {
-                // MODO EDICIÓN
-                const updatedPedido = pedidoData as Pedido;
-                setPedidos(prev => prev.map(p => p._id === updatedPedido._id ? updatedPedido : p));
-            } else {
-                // MODO ALTA (Crear ID numérico)
-                // Buscamos el ID más alto actual y sumamos 1
-                const maxId = pedidos.length > 0 ? Math.max(...pedidos.map(p => p._id)) : 0;
-                
-                const newPedido: Pedido = {
-                    ...pedidoData,
-                    _id: maxId + 1 
-                } as Pedido;
-                
-                setPedidos(prev => [...prev, newPedido]);
+            const url = isEditMode
+            ? `http://localhost:3000/api/pedidos/${pedidoData._id}`
+            : `http://localhost:3000/api/pedidos`
+
+            const response = await fetch(url, {
+                method: isEditMode ? 'PUT' : 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${token}`
+                },
+                body: JSON.stringify({
+                    id_cliente: pedidoData.id_cliente,
+                    tipo_trabajo: pedidoData.tipo_trabajo,
+                    cantidad: pedidoData.cantidad,
+                    tamaño: pedidoData.tamaño,
+                    color: pedidoData.color,
+                    tipo_papel: pedidoData.tipo_papel,
+                    estado: pedidoData.estado,
+                    observaciones: pedidoData.observaciones,
+                    estado_pago: pedidoData.estado_pago
+                })
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Error en la operación');
+            }
+
+            const dataSaved = await response.json()
+
+            if(isEditMode){
+                setPedidos(prev => prev.map(p => p._id === dataSaved._id ? dataSaved : p))
+            }else{
+                setPedidos(prev => [...prev, dataSaved])
             }
             
             setEditingPedido(null); // Cerrar modal
+            
         } catch (err) {
             console.error('Error', err);
             setError('No se pudo guardar el pedido.');

@@ -45,9 +45,9 @@ function ClientsPage() {
                 setClients(await response.json())
                 setError('')
             }catch(error:any){
-                console.error('Error al cargar todos los turnos:', error);
+                console.error('Error al cargar todos los clientes:', error);
                 if (error.response?.status !== 401) { 
-                    setError('No se pudieron cargar todos los turnos. Por favor intenta más tarde.');
+                    setError('No se pudieron cargar todos los clientes. Por favor intenta más tarde.');
                 }
             }finally{
                 setIsLoading(false);
@@ -88,7 +88,7 @@ function ClientsPage() {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `${token}`
-            },
+                },
                 body: JSON.stringify({
                     nombre: clientData.nombre,
                     empresa: clientData.empresa,
@@ -240,6 +240,7 @@ function ClientsPage() {
                             <table className="data-table">
                                 <thead>
                                     <tr>
+                                        <th>ID</th>
                                         <th>Nombre</th>
                                         <th>Empresa</th>
                                         <th>Email</th>
@@ -251,6 +252,7 @@ function ClientsPage() {
                                 <tbody>
                                     {filteredClients.map(client => (
                                         <tr key={client._id}>
+                                            <td>{client._id}</td>
                                             <td>{client.nombre}</td>
                                             <td>{client.empresa}</td>
                                             <td>{client.email}</td>
