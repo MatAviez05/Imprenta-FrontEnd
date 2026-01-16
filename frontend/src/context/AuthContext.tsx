@@ -62,7 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(false);
   }, []);
 
-  // LogIn SIM 
+  // Login
   const login = async (email: string, password: string) => {
     try{
 
@@ -93,7 +93,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(userData);
 
     }catch(error:any){
-      
+
       console.error('Error en login:', error);
       throw new Error(error.response?.data?.message || 'Error al iniciar sesión');
     }

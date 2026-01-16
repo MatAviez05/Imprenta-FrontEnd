@@ -16,16 +16,8 @@ interface Client {
 
 type ClientFormData = Omit<Client, 'id'> & { id?: string };
 
-// Mock datos
-const initialMockClients: Client[] = [
-    { id: '1', nombre: 'Ramiro', empresa: 'Impresiones', telefono: '11-1111-2222', email: 'rama@gmail.com', direccion: 'Calle 1' },
-    { id: '2', nombre: 'Hector Gonzales', empresa: 'Papelera', telefono: '11-1122-2222', email: 'hector@gmail.com', direccion: 'Avenia 12' },
-    { id: '3', nombre: 'Pedro Lopez', empresa: 'Grafica Total', telefono: '22-1111-2222', email: 'pedro@grafica.com', direccion: 'Ruta 5' },
-];
-
-
 function ClientsPage() {
-    const { logout } = useAuth();
+    const { token, logout } = useAuth();
     
     const [clients, setClients] = useState<Client[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -40,11 +32,27 @@ function ClientsPage() {
     // Carga de cliente mock
     useEffect(() => {
         const fetchClientsMock = async () => {
+
             setIsLoading(true);
             setError('');
-            await new Promise(resolve => setTimeout(resolve, 500)); 
-            setClients(initialMockClients);
-            setIsLoading(false);
+            try{
+                const response = await fetch('http://localhost:3000/api/clientes/list-clientes', {
+                    headers: {
+                        'Authorization': `${token}`
+                    }
+                })
+
+                setClients(await response.json())
+                setError('')
+            }catch(error:any){
+                console.error('Error al cargar todos los turnos:', error);
+                if (error.response?.status !== 401) { 
+                    setError('No se pudieron cargar todos los turnos. Por favor intenta más tarde.');
+                }
+            }finally{
+                setIsLoading(false);
+            }
+            
         };
         fetchClientsMock();
     }, []);
