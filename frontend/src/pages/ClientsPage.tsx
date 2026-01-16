@@ -6,7 +6,7 @@ import '../pages/css/ClientsPage.css';
 
 // Inter
 interface Client {
-    id: string;
+    _id: string;
     nombre: string;
     empresa: string;
     telefono: string;
@@ -14,7 +14,7 @@ interface Client {
     direccion: string;
 }
 
-type ClientFormData = Omit<Client, 'id'> & { id?: string };
+type ClientFormData = Omit<Client, '_id'> & { _id?: string };
 
 function ClientsPage() {
     const { token, logout } = useAuth();
@@ -63,7 +63,7 @@ function ClientsPage() {
     const handleAlta = () => {
         // modo creacion
         setEditingClient({
-            id: '', nombre: '', empresa: '', telefono: '', email: '', direccion: ''
+            _id: '', nombre: '', empresa: '', telefono: '', email: '', direccion: ''
         } as Client); 
     };
 
@@ -77,26 +77,45 @@ function ClientsPage() {
         setError('');
        
         try {
-            await new Promise(resolve => setTimeout(resolve, 750)); 
-            
-            if (clientData.id) {
-                // Edicion
-                const updatedClient = clientData as Client;
-                setClients(prev => prev.map(c => c.id === updatedClient.id ? updatedClient : c));
+            const isEditMode = !!clientData._id;
+
+            const url = isEditMode 
+            ? `http://localhost:3000/api/clientes/${clientData._id}` 
+            : 'http://localhost:3000/api/clientes/auth/register';
+
+            const response = await fetch(url, {
+                method: isEditMode ? 'PUT' : 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${token}`
+            },
+                body: JSON.stringify({
+                    nombre: clientData.nombre,
+                    empresa: clientData.empresa,
+                    telefono: clientData.telefono,
+                    email: clientData.email,
+                    direccion: clientData.direccion,
+                    tipoUsuario: 'Cliente'
+                })
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Error en la operación');
+            }
+
+            const dataSaved = await response.json()
+
+            if (isEditMode) {
+                setClients(prev => prev.map(p => p._id === dataSaved._id ? dataSaved : p));
             } else {
-                // Alta
-                const newClient: Client = {
-                    ...clientData,
-                    id: `c${Date.now()}` // Genera id para mock
-                } as Client;
-                setClients(prev => [...prev, newClient]);
+                setClients(prev => [...prev, dataSaved]);
             }
             
             setEditingClient(null); 
         } catch (err) {
             console.error('Error', err);
             setError('No se pudo guardar.');
-            throw err; 
         } 
     };
 
@@ -114,8 +133,15 @@ function ClientsPage() {
         setError('');
         setIsLoading(true); 
         try {
-            await new Promise(resolve => setTimeout(resolve, 500)); 
-            setClients(prev => prev.filter(client => client.id !== id));
+            const response = await fetch(`http://localhost:3000/api/clientes/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `${token}` }
+            })
+
+            if (!response.ok){
+                throw new Error('No se pudo eliminar el cliente')
+            }
+            setClients(prev => prev.filter(client => client._id !== id));
         } catch (err) {
             console.error('Error', err);
             setError('No se pudo eliminar.');
@@ -154,7 +180,7 @@ function ClientsPage() {
             {editingClient && (
                 <ClientForm 
                     // Si tiene ID pasa cliente, sino para el alta
-                    initialData={editingClient.id ? editingClient : null} 
+                    initialData={editingClient._id ? editingClient : null} 
                     onSave={handleSave}
                     onCancel={handleCancel}
                 />
@@ -224,7 +250,7 @@ function ClientsPage() {
                                 </thead>
                                 <tbody>
                                     {filteredClients.map(client => (
-                                        <tr key={client.id}>
+                                        <tr key={client._id}>
                                             <td>{client.nombre}</td>
                                             <td>{client.empresa}</td>
                                             <td>{client.email}</td>
@@ -235,7 +261,7 @@ function ClientsPage() {
                                                     Modificar
                                                 </button>
                                                 {' | '}
-                                                <button className="btn-link text-danger" onClick={() => handleDelete(client.id, client.nombre)} disabled={isLoading || !!editingClient}>
+                                                <button className="btn-link text-danger" onClick={() => handleDelete(client._id, client.nombre)} disabled={isLoading || !!editingClient}>
                                                     Eliminar
                                                 </button>
                                             </td>
