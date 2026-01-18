@@ -85,12 +85,14 @@ git clone <URL_REPOSITORIO>
 cd frontend
 ```
 
-3. Instalar dependecias
+3. Usar el archivo `.env.example` para agregar las variables de entorno y luego renombrar al archivo a `.env`
+
+4. Instalar dependecias
 ```bash
 npm i
 ```
 
-4. Correr el Front
+5.Correr el Front
 ```bash
 npm run dev
 ```
