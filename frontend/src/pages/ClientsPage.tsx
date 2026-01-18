@@ -36,7 +36,7 @@ function ClientsPage() {
             setIsLoading(true);
             setError('');
             try{
-                const response = await fetch('http://localhost:3000/api/clientes/list-clientes', {
+                const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/clientes/list-clientes`, {
                     headers: {
                         'Authorization': `${token}`
                     }
@@ -80,8 +80,8 @@ function ClientsPage() {
             const isEditMode = !!clientData._id;
 
             const url = isEditMode 
-            ? `http://localhost:3000/api/clientes/${clientData._id}` 
-            : 'http://localhost:3000/api/clientes/auth/register';
+            ? `${import.meta.env.VITE_BASE_URL}/api/clientes/${clientData._id}` 
+            : `${import.meta.env.VITE_BASE_URL}/api/clientes/auth/register`;
 
             const response = await fetch(url, {
                 method: isEditMode ? 'PUT' : 'POST',
@@ -133,7 +133,7 @@ function ClientsPage() {
         setError('');
         setIsLoading(true); 
         try {
-            const response = await fetch(`http://localhost:3000/api/clientes/${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/clientes/${id}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `${token}` }
             })

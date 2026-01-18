@@ -37,7 +37,7 @@ function TodosPedidosPage(){
             setIsLoading(true);
             setError('');
             try{
-                const response = await fetch('http://localhost:3000/api/pedidos', {
+                const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/pedidos`, {
                     headers: {
                         'Authorization': `${token}`
                     }
@@ -88,7 +88,7 @@ function TodosPedidosPage(){
         setError('');
         setIsLoading(true); 
         try {
-            const response = await fetch(`http://localhost:3000/api/pedidos/${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/pedidos/${id}`, {
 
                 method: 'DELETE',
                 headers: {
@@ -116,8 +116,8 @@ function TodosPedidosPage(){
             const isEditMode = !!pedidoData._id
 
             const url = isEditMode
-            ? `http://localhost:3000/api/pedidos/${pedidoData._id}`
-            : `http://localhost:3000/api/pedidos`
+            ? `${import.meta.env.VITE_BASE_URL}/api/pedidos/${pedidoData._id}`
+            : `${import.meta.env.VITE_BASE_URL}/api/pedidos`
 
             const response = await fetch(url, {
                 method: isEditMode ? 'PUT' : 'POST',
