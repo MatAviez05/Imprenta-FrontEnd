@@ -92,7 +92,7 @@ cd frontend
 npm i
 ```
 
-5.Correr el Front
+5. Correr el Front
 ```bash
 npm run dev
 ```
