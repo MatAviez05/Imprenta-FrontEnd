@@ -100,7 +100,7 @@ function TodosPedidosPage(){
                 throw new Error('No se pudo eliminar el cliente')
             }
 
-            setPedidos(prev => prev.filter(pedido => pedido._id === id))
+            setPedidos(prev => prev.filter(pedido => pedido._id !== id))
             
         } catch (err) {
             console.error('Error', err);
