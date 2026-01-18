@@ -41,7 +41,7 @@ function ReportsPage() {
 
     if (isLoading) {
         return (
-            <div className="reports-page-container loading-container">
+            <div className="reports-page-container-loading-container">
                 <p>Generando reportes...</p>
             </div>
         );

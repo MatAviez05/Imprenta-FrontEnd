@@ -3,7 +3,8 @@ import './ClientForm.css';
 
 // Inter
 interface Client {
-    id: string;
+    _id?: string;
+    id?: string
     nombre: string;
     empresa: string;
     telefono: string;
@@ -41,7 +42,7 @@ export const ClientForm: React.FC<ClientFormProps> = ({ initialData, onSave, onC
     const [formData, setFormData] = useState<ClientFormData>(() => getInitialState(initialData));
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const isEditMode = !!initialData?.id;
+    const isEditMode = !!initialData?._id;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -49,13 +50,8 @@ export const ClientForm: React.FC<ClientFormProps> = ({ initialData, onSave, onC
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
         
-        // Simula validacion
-        if (!formData.nombre || !formData.email) {
-            alert("Nombre y Email tienen que estar.");
-            return;
-        }
+        e.preventDefault();
 
         setIsSubmitting(true);
         try {
