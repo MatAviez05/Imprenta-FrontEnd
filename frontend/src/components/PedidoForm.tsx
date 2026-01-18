@@ -89,11 +89,29 @@ export const PedidoForm: React.FC<PedidoFormProps> = ({ initialData, onSave, onC
                         <input type="text" name="tipo_papel" placeholder="Tipo de Papel" value={formData.tipo_papel} onChange={handleChange} disabled={isSubmitting} />
                     </div>
 
-                    {/*Hacer mas adelante un select*/}
-                    <input type="text" name="estado" placeholder="Estado (Ej: En proceso)" value={formData.estado} onChange={handleChange} disabled={isSubmitting} />
+                    <select
+                        name='estado'
+                        value={formData.estado}
+                        onChange={handleChange}
+                        disabled={isSubmitting}
+                    >
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="En proceso">En proceso</option>
+                        <option value="Terminado">Terminado</option>
+                        <option value="Entregado">Entregado</option>
+                        <option value="Cancelado">Cancelado</option>
+                    </select>
 
-                    {/*Hacer mas adelante un select*/}
-                    <input type="text" name="estado_pago" placeholder="Estado Pago (Ej: Seña)" value={formData.estado_pago} onChange={handleChange} disabled={isSubmitting} />
+                    <select 
+                        name="estado_pago" 
+                        value={formData.estado_pago} 
+                        onChange={handleChange} 
+                        disabled={isSubmitting}
+                    >
+                        <option value="Pendiente">Pendiente (No pagado)</option>
+                        <option value="Seña">Seña (Pago parcial)</option>
+                        <option value="Pagado">Pagado (Total)</option>
+                    </select>
 
                     <textarea 
                         name="observaciones" 

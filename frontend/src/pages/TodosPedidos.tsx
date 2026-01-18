@@ -176,7 +176,7 @@ function TodosPedidosPage(){
 
     if (isLoading && pedidos.length === 0 && !editingPedido) {
         return (
-            <div className="clients-page-container loading-container">
+            <div className="clients-page-container-loading-container">
                 <p>Cargando lista de clientes...</p>
             </div>
         );
@@ -194,7 +194,7 @@ function TodosPedidosPage(){
             <header>
                 <nav className="navbar">
                     <div className="navbar-content">
-                        <h2>Imprenta - Gestion de Clientes</h2>
+                        <h2>Imprenta - Gestion de Pedidos</h2>
                         <div className="navbar-right">
                             <Link to="/" className="btn-back">
                                 Volver al Menu
@@ -245,6 +245,7 @@ function TodosPedidosPage(){
                                     <th>Estado del pedido</th>
                                     <th>Observaciones</th>
                                     <th>Estado del Pago</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>

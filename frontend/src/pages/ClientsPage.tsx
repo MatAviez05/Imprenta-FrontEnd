@@ -168,7 +168,7 @@ function ClientsPage() {
     // Renderizado
     if (isLoading && clients.length === 0 && !editingClient) {
         return (
-            <div className="clients-page-container loading-container">
+            <div className="clients-page-container-loading-container">
                 <p>Cargando lista de clientes...</p>
             </div>
         );
