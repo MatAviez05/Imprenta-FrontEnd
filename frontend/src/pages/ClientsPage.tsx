@@ -6,7 +6,7 @@ import '../pages/css/ClientsPage.css';
 
 // Inter
 interface Client {
-    id: string;
+    _id: string;
     nombre: string;
     empresa: string;
     telefono: string;
@@ -14,18 +14,10 @@ interface Client {
     direccion: string;
 }
 
-type ClientFormData = Omit<Client, 'id'> & { id?: string };
-
-// Mock datos
-const initialMockClients: Client[] = [
-    { id: '1', nombre: 'Ramiro', empresa: 'Impresiones', telefono: '11-1111-2222', email: 'rama@gmail.com', direccion: 'Calle 1' },
-    { id: '2', nombre: 'Hector Gonzales', empresa: 'Papelera', telefono: '11-1122-2222', email: 'hector@gmail.com', direccion: 'Avenia 12' },
-    { id: '3', nombre: 'Pedro Lopez', empresa: 'Grafica Total', telefono: '22-1111-2222', email: 'pedro@grafica.com', direccion: 'Ruta 5' },
-];
-
+type ClientFormData = Omit<Client, '_id'> & { _id?: string };
 
 function ClientsPage() {
-    const { logout } = useAuth();
+    const { token, logout } = useAuth();
     
     const [clients, setClients] = useState<Client[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -40,11 +32,27 @@ function ClientsPage() {
     // Carga de cliente mock
     useEffect(() => {
         const fetchClientsMock = async () => {
+
             setIsLoading(true);
             setError('');
-            await new Promise(resolve => setTimeout(resolve, 500)); 
-            setClients(initialMockClients);
-            setIsLoading(false);
+            try{
+                const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/clientes/list-clientes`, {
+                    headers: {
+                        'Authorization': `${token}`
+                    }
+                })
+
+                setClients(await response.json())
+                setError('')
+            }catch(error:any){
+                console.error('Error al cargar todos los clientes:', error);
+                if (error.response?.status !== 401) { 
+                    setError('No se pudieron cargar todos los clientes. Por favor intenta más tarde.');
+                }
+            }finally{
+                setIsLoading(false);
+            }
+            
         };
         fetchClientsMock();
     }, []);
@@ -55,7 +63,7 @@ function ClientsPage() {
     const handleAlta = () => {
         // modo creacion
         setEditingClient({
-            id: '', nombre: '', empresa: '', telefono: '', email: '', direccion: ''
+            _id: '', nombre: '', empresa: '', telefono: '', email: '', direccion: ''
         } as Client); 
     };
 
@@ -69,26 +77,45 @@ function ClientsPage() {
         setError('');
        
         try {
-            await new Promise(resolve => setTimeout(resolve, 750)); 
-            
-            if (clientData.id) {
-                // Edicion
-                const updatedClient = clientData as Client;
-                setClients(prev => prev.map(c => c.id === updatedClient.id ? updatedClient : c));
+            const isEditMode = !!clientData._id;
+
+            const url = isEditMode 
+            ? `${import.meta.env.VITE_BASE_URL}/api/clientes/${clientData._id}` 
+            : `${import.meta.env.VITE_BASE_URL}/api/clientes/auth/register`;
+
+            const response = await fetch(url, {
+                method: isEditMode ? 'PUT' : 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${token}`
+                },
+                body: JSON.stringify({
+                    nombre: clientData.nombre,
+                    empresa: clientData.empresa,
+                    telefono: clientData.telefono,
+                    email: clientData.email,
+                    direccion: clientData.direccion,
+                    tipoUsuario: 'Cliente'
+                })
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Error en la operación');
+            }
+
+            const dataSaved = await response.json()
+
+            if (isEditMode) {
+                setClients(prev => prev.map(p => p._id === dataSaved._id ? dataSaved : p));
             } else {
-                // Alta
-                const newClient: Client = {
-                    ...clientData,
-                    id: `c${Date.now()}` // Genera id para mock
-                } as Client;
-                setClients(prev => [...prev, newClient]);
+                setClients(prev => [...prev, dataSaved]);
             }
             
             setEditingClient(null); 
         } catch (err) {
             console.error('Error', err);
             setError('No se pudo guardar.');
-            throw err; 
         } 
     };
 
@@ -106,8 +133,15 @@ function ClientsPage() {
         setError('');
         setIsLoading(true); 
         try {
-            await new Promise(resolve => setTimeout(resolve, 500)); 
-            setClients(prev => prev.filter(client => client.id !== id));
+            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/clientes/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `${token}` }
+            })
+
+            if (!response.ok){
+                throw new Error('No se pudo eliminar el cliente')
+            }
+            setClients(prev => prev.filter(client => client._id !== id));
         } catch (err) {
             console.error('Error', err);
             setError('No se pudo eliminar.');
@@ -120,7 +154,7 @@ function ClientsPage() {
         logout();
     };
 
-    // Filtrado de clientes
+    // Filtrado de Pedidos
     const filteredClients = (() => {
         if (!searchTerm) return clients;
         const lowerCaseSearch = searchTerm.toLowerCase();
@@ -134,7 +168,7 @@ function ClientsPage() {
     // Renderizado
     if (isLoading && clients.length === 0 && !editingClient) {
         return (
-            <div className="clients-page-container loading-container">
+            <div className="clients-page-container-loading-container">
                 <p>Cargando lista de clientes...</p>
             </div>
         );
@@ -146,7 +180,7 @@ function ClientsPage() {
             {editingClient && (
                 <ClientForm 
                     // Si tiene ID pasa cliente, sino para el alta
-                    initialData={editingClient.id ? editingClient : null} 
+                    initialData={editingClient._id ? editingClient : null} 
                     onSave={handleSave}
                     onCancel={handleCancel}
                 />
@@ -206,6 +240,7 @@ function ClientsPage() {
                             <table className="data-table">
                                 <thead>
                                     <tr>
+                                        <th>ID</th>
                                         <th>Nombre</th>
                                         <th>Empresa</th>
                                         <th>Email</th>
@@ -216,7 +251,8 @@ function ClientsPage() {
                                 </thead>
                                 <tbody>
                                     {filteredClients.map(client => (
-                                        <tr key={client.id}>
+                                        <tr key={client._id}>
+                                            <td>{client._id}</td>
                                             <td>{client.nombre}</td>
                                             <td>{client.empresa}</td>
                                             <td>{client.email}</td>
@@ -227,7 +263,7 @@ function ClientsPage() {
                                                     Modificar
                                                 </button>
                                                 {' | '}
-                                                <button className="btn-link text-danger" onClick={() => handleDelete(client.id, client.nombre)} disabled={isLoading || !!editingClient}>
+                                                <button className="btn-link text-danger" onClick={() => handleDelete(client._id, client.nombre)} disabled={isLoading || !!editingClient}>
                                                     Eliminar
                                                 </button>
                                             </td>

@@ -3,7 +3,6 @@ import type { ReactNode } from 'react';
 
 // Estructura de usuario
 interface User {
-  id: string; 
   nombre: string;
   email: string;
   rol: string; 
@@ -19,11 +18,6 @@ interface AuthContextType {
   isLoading: boolean;        
 }
 
-// Claves 
-const TOKEN_KEY = 'authToken';
-//const USER_KEY = 'authUser';
-
-
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -37,7 +31,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const payloadBase64 = tokenReceived.split('.')[1];
         const payloadDecoded = JSON.parse(atob(payloadBase64));
         const userData: User = {
-            id: payloadDecoded.userId || 'mock-id',
             nombre: payloadDecoded.userName || 'Usuario Mock',
             email: payloadDecoded.userEmail,
             rol: payloadDecoded.userRole || 'Administrador', 
@@ -53,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Al cargar la app, verifica si hay token guardado
   useEffect(() => {
-    const storedToken = localStorage.getItem(TOKEN_KEY);
+    const storedToken = localStorage.getItem('token');
     
     if (storedToken) {
       const userData = decodeToken(storedToken);
@@ -62,53 +55,54 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setToken(storedToken);
           setUser(userData);
       } else {
-          localStorage.removeItem(TOKEN_KEY);
+          localStorage.removeItem('token');
       }
     }
 
     setIsLoading(false);
   }, []);
 
-  // LogIn SIM 
+  // Login
   const login = async (email: string, password: string) => {
+    try{
 
-    // Simulacion al Back
-    await new Promise(resolve => setTimeout(resolve, 500)); 
+      const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/clientes/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: email,
+          contraseña: password
+        })
+      })
 
-    if (email !== 'admin@imprenta.com' || password !== '123456') {
-      throw new Error('Datos de inicio incorrectos (Sim)');
+      const tokenReceived = await response.json()
+
+      const userData = decodeToken(tokenReceived);
+
+      if (!userData) {
+          throw new Error('Error al procesar el token.');
+      }
+
+      // Save
+      localStorage.setItem('token', tokenReceived);
+      
+      // Actualiza estado
+      setToken(tokenReceived);
+      setUser(userData);
+
+    }catch(error:any){
+
+      console.error('Error en login:', error);
+      throw new Error(error.response?.data?.message || 'Error al iniciar sesión');
     }
-
-    // Sim Respuesta
-    const mockPayload = {
-      userId: '101',
-      userName: 'Admin Principal',
-      userEmail: email,
-      userRole: 'Administrador',
-    };
-
-    // JWT
-    const mockToken = 
-      `header.${btoa(JSON.stringify(mockPayload)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')}.signature`;
-
-    // Decodificacion de token
-    const userData = decodeToken(mockToken);
-
-    if (!userData) {
-        throw new Error('Error al procesar el token.');
-    }
-
-    // Save
-    localStorage.setItem(TOKEN_KEY, mockToken);
     
-    // Actualiza estado
-    setToken(mockToken);
-    setUser(userData);
   };
 
   // LogOut
   const logout = () => {
-    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem('token');
     setToken(null);
     setUser(null);
   };

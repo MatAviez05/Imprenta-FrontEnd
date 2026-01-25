@@ -1,4 +1,3 @@
-/* --- Contenedor Principal (Igual que clients-page-container) --- */
 .todos-pedidos-conteiner {
     min-height: 50vh;
     background-color: #f8f9fa;
@@ -6,7 +5,6 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-/* --- Navbar (Reutilizado) --- */
 .navbar {
     background-color: #343a40;
     padding: 15px 40px;
@@ -33,9 +31,8 @@
     gap: 10px;
 }
 
-/* Botones del Navbar */
 .btn-logout, .btn-back {
-    display: inline-block; /* Asegura que el Link se comporte como botón */
+    display: inline-block; 
     background: none;
     border: 1px solid white;
     color: white;
@@ -51,9 +48,8 @@
     background-color: rgba(255, 255, 255, 0.15);
 }
 
-/* --- Contenido de la Página --- */
 .page-content {
-    max-width: 1200px; /* Aumenté un poco el ancho porque la tabla es grande */
+    max-width: 1200px; 
     margin: 0 auto;
     padding: 30px 20px;
 }
@@ -71,7 +67,6 @@
     margin: 0;
 }
 
-/* --- Mensajes de Estado --- */
 .error-message {
     background-color: #f8d7da;
     color: #721c24;
@@ -94,33 +89,33 @@
     font-weight: 400;
 }
 
-/* --- Tabla y Contenedor de Lista --- */
 .list-wrapper {
     background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-    overflow-x: auto; /* Permite scroll horizontal si la tabla es muy ancha */
+    padding: 10px; 
+    overflow-x: hidden; 
 }
 
 .data-table {
     width: 100%;
-    border-collapse: collapse;
-    min-width: 900px; /* Asegura que no se aplaste demasiado en móviles */
+    table-layout: fixed;
+    min-width: 0; 
 }
 
 .data-table th, .data-table td {
-    padding: 12px 15px;
+    padding: 8px 4px;
     text-align: left;
     border-bottom: 1px solid #dee2e6;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .data-table th {
     background-color: #e9ecef;
     font-weight: 600;
     color: #495057;
-    white-space: nowrap; /* Evita que los títulos se rompan en dos líneas */
+    white-space: normal; 
+    line-height: 1.2;
 }
 
 .data-table tr:hover {
@@ -128,12 +123,11 @@
 }
 
 .data-table td strong {
-    color: #007bff; /* Color primario para resaltar el ID */
+    color: #007bff; 
 }
 
-/* --- Botón Eliminar (Nuevo estilo basado en danger) --- */
 .btn-cancelar {
-    background-color: #dc3545; /* Rojo danger */
+    background-color: #dc3545;
     color: white;
     border: none;
     padding: 6px 12px;
@@ -147,50 +141,70 @@
     background-color: #c82333;
 }
 
-/* --- Contenedor del Footer --- */
 .footer-contenedor {
-    /* Fondo oscuro para que coincida con el navbar */
     background-color: #343a40; 
     padding: 15px 40px;
-    color: white; /* Color de texto claro */
+    color: white;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    text-align: center; /* Centra el contenido del footer */
-    /* Lo fijamos en la parte inferior para que siempre esté visible o al final del contenido */
-    /* position: fixed; 
-    bottom: 0;
-    width: 100%; */ 
-    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil hacia arriba */
+    text-align: center;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* --- Estilos del Elemento Footer (El contenido interno) --- */
 .footer-contenedor footer {
     max-width: 1200px;
     margin: 0 auto;
-    font-size: 0.9rem; /* Un poco más pequeño que el texto principal */
+    font-size: 0.9rem;
     line-height: 1.6;
 }
 
-/* --- Estilos del Texto Pequeño (small) --- */
 .footer-contenedor small {
-    display: block; /* Asegura que la línea de enlaces ocupe su propio espacio */
+    display: block; 
     margin-bottom: 5px;
 }
 
-/* --- Estilos de los Enlaces (a) --- */
 .footer-contenedor a {
-    color: #adb5bd; /* Un gris claro para los enlaces, sutil */
+    color: #adb5bd;
     text-decoration: none;
     transition: color 0.2s;
 }
 
 .footer-contenedor a:hover {
-    color: #ffffff; /* Blanco puro al pasar el ratón para destacar */
-    text-decoration: underline; /* Subrayado al pasar el ratón */
+    color: #ffffff;
+    text-decoration: underline; 
 }
 
-/* --- Estilos para el Salto de Línea y Copyright --- */
-/* Estiliza la línea del copyright */
 .footer-contenedor footer > *:last-child {
     font-size: 0.85rem;
-    color: #6c757d; /* Gris más oscuro para el texto de copyright */
+    color: #6c757d;
+}
+
+.clients-page-container-loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    width: 100%;
+}
+
+.clients-page-container-loading-container p {
+    font-size: 1.1rem;
+    color: #666;
+    margin-top: 15px;
+    font-family: sans-serif;
+}
+
+.clients-page-container-loading-container::before {
+    content: "";
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

@@ -1,78 +1,147 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom'; 
 import { useAuth } from '../context/AuthContext'; 
-import './css/ReportsPage.css'; 
+import '../pages/css/ReportsPage.css'; 
 
-// Interfaz para la estructura de datos de estado de trabajos
-interface TrabajoEstado {
+// interfaz 
+interface Pedido {
+    _id: number;
+    id_cliente: number;
+    tipo_trabajo: string;
+    cantidad: number;
+    tamaño: string;
+    color: string;
+    tipo_papel: string;
+    estado: string; 
+    observaciones: string;
+    estado_pago: string;
+}
+
+// Grafico de estados
+interface EstadoData {
     estado: string;
     cantidad: number;
     color: string;
 }
 
-// Mock datos
-const mockReportData = {
-    trabajosPorEstado: [
-        { estado: 'Pendiente', cantidad: 15, color: '#f0ad4e' },
-        { estado: 'En Producción', cantidad: 35, color: '#007bff' },
-        { estado: 'Finalizado', cantidad: 80, color: '#5cb85c' },
-        { estado: 'Entregado', cantidad: 60, color: '#343a40' },
-    ] as TrabajoEstado[], // Aseguramos el tipo para TypeScript
-    ingresosMensuales: {
-        meses: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
-        ingresos: [150000, 185000, 210000, 195000, 250000, 230000],
-    },
-    ingresoAnualEstimado: 2750000,
-};
-
 function ReportsPage() {
-    const { logout } = useAuth();
+    const { token, logout } = useAuth();
     
+    const [pedidos, setPedidos] = useState<Pedido[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState('');
 
+    // Fetch de datos
     useEffect(() => {
-        const timer = setTimeout(() => setIsLoading(false), 500);
-        return () => clearTimeout(timer);
-    }, []);
+        const fetchPedidos = async () => {
+            setIsLoading(true);
+            try {
+                const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/pedidos`, {
+                    headers: {
+                        'Authorization': `${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error al obtener datos del servidor');
+                }
+
+                const data = await response.json();
+
+                if (Array.isArray(data)) {
+                    setPedidos(data);
+                } else {
+                    setPedidos([]);
+                }
+                
+            } catch (err) {
+                console.error("Error fetching reports data:", err);
+                setError('No se pudieron cargar los reportes.');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchPedidos();
+    }, [token]);
 
     const handleLogout = () => {
         logout();
     };
 
+    // Logica de los DATOS
+
+    // Calcular "Trabajos por Estado" 
+    const trabajosPorEstado: EstadoData[] = useMemo(() => {
+        if (pedidos.length === 0) return [];
+
+        const mapaEstados: Record<string, string> = {
+            'Pendiente': '#f0ad4e',
+            'En Producción': '#007bff',
+            'Finalizado': '#5cb85c',
+            'Entregado': '#343a40'
+        };
+
+        // Contar ocurrencias
+        const conteo = pedidos.reduce((acc, pedido) => {
+            const estadoNormalizado = pedido.estado || 'Pendiente'; 
+            acc[estadoNormalizado] = (acc[estadoNormalizado] || 0) + 1;
+            return acc;
+        }, {} as Record<string, number>);
+
+        // Transformar a array 
+        return Object.keys(mapaEstados).map(estado => ({
+            estado,
+            cantidad: conteo[estado] || 0,
+            color: mapaEstados[estado]
+        }));
+    }, [pedidos]);
+
+    // 2. Mock de Ingresos (Esto se mantiene estatico por falta de 'precio en DB')
+    const mockIngresosData = {
+        ingresosMensuales: {
+            meses: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+            ingresos: [150000, 185000, 210000, 195000, 250000, 230000],
+        },
+        ingresoAnualEstimado: 2750000,
+    };
+
+    const { ingresosMensuales, ingresoAnualEstimado } = mockIngresosData;
+    const totalPedidos = pedidos.length || 1; 
+
     if (isLoading) {
         return (
-            <div className="reports-page-container loading-container">
-                <p>Generando reportes...</p>
+            <div className="reports-page-container-loading-container">
+                <p>Generando estadísticas...</p>
             </div>
         );
     }
 
-    const { trabajosPorEstado, ingresosMensuales, ingresoAnualEstimado } = mockReportData;
-
-    // LÓGICA CLAVE PARA ESCALAR BARRAS: Encuentra la cantidad más alta.
-    const maxTrabajos = trabajosPorEstado.reduce((max, item) => 
-        Math.max(max, item.cantidad), 0
-    );
-
+    if (error) {
+        return (
+            <div className="reports-page-container">
+                <p className="error-text">{error}</p>
+                <Link to="/" className="btn-back">Volver</Link>
+            </div>
+        );
+    }
 
     return (
         <div className="reports-page-container">
             {/* NAVBAR */}
-            <header>
-                <nav className="navbar">
-                    <div className="navbar-content">
-                        <h2>Imprenta - Modulo de Reportes</h2>
-                        <div className="navbar-right">
-                            <Link to="/" className="btn-back">
-                                Volver al Menu
-                            </Link>
-                            <button onClick={handleLogout} className="btn-logout">
-                                Cerrar Sesión
-                            </button>
-                        </div>
+            <nav className="navbar">
+                <div className="navbar-content">
+                    <h2>Imprenta - Modulo de Reportes</h2>
+                    <div className="navbar-right">
+                        <Link to="/" className="btn-back">
+                            Volver a HomePage
+                        </Link>
+                        <button onClick={handleLogout} className="btn-logout">
+                            Cerrar Sesión
+                        </button>
                     </div>
-                </nav>
-            </header>
+                </div>
+            </nav>
 
             {/* CONTENIDO PRINCIPAL */}
             <div className="page-content">
@@ -82,36 +151,34 @@ function ReportsPage() {
 
                 <div className="reports-grid">
                     
-                    {/* TRABAJOS POR ESTADO (SIMPLE Y ESCALADO) */}
+                    {/* TRABAJOS POR ESTADO */}
                     <div className="report-card full-width">
                         <h3>Trabajos por Estado Actual</h3>
                         <div className="data-list">
-                            {trabajosPorEstado.map(item => {
-                                // Cálculo del ancho: cantidad actual / cantidad máxima * 100
-                                const widthPercentage = (item.cantidad / maxTrabajos) * 100;
-
-                                return (
+                            {trabajosPorEstado.length > 0 ? (
+                                trabajosPorEstado.map(item => (
                                     <div key={item.estado} className="data-item">
                                         <span className="item-label">{item.estado} ({item.cantidad})</span>
                                         <div className="progress-bar-container">
                                             <div 
                                                 className="progress-bar" 
                                                 style={{ 
-                                                    // Aplicación del escalado
-                                                    width: `${widthPercentage}%`, 
+                                                    width: `${(item.cantidad / totalPedidos) * 100}%`, 
                                                     backgroundColor: item.color 
                                                 }}
                                             ></div>
                                         </div>
                                     </div>
-                                );
-                            })}
+                                ))
+                            ) : (
+                                <p>No hay trabajos registrados para generar metricas.</p>
+                            )}
                         </div>
                     </div>
 
                     {/* INGRESOS MENSUALES */}
                     <div className="report-card">
-                        <h3>Ingresos del Ultimo Semestre</h3>
+                        <h3>Ingresos del Último Semestre (Estimado)</h3>
                         <div className="monthly-chart">
                             {ingresosMensuales.ingresos.map((ingreso, index) => {
                                 const maxIngreso = Math.max(...ingresosMensuales.ingresos);
@@ -127,6 +194,7 @@ function ReportsPage() {
                             })}
                         </div>
                         <p className="summary-text">Total acumulado: ${ingresosMensuales.ingresos.reduce((a, b) => a + b, 0).toLocaleString('es-AR')}</p>
+                        <small style={{display:'block', marginTop:'10px', color:'#999'}}>* Datos financieros simulados (Falta precio en BD)</small>
                     </div>
 
                     {/* ESTIMACION INGRESOS ANUALES */}
@@ -136,11 +204,12 @@ function ReportsPage() {
                             <p className="annual-figure">
                                 ${ingresoAnualEstimado.toLocaleString('es-AR')}
                             </p>
-                            <p className="summary-text">Proyección basada en el rendimiento actual.</p>
+                            <p className="summary-text">Proyeccion basada en el rendimiento actual.</p>
                         </div>
                     </div>
                 </div>
             </div>
+
             <nav className="footer-contenedor">
                 <footer>
                     <small>
