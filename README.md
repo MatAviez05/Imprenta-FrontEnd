@@ -75,24 +75,34 @@ https://ramirogabeiras1998.atlassian.net/jira/software/projects/KAN/list?jql=pro
 
 ## Construccion e inicializacion del proyecto del proyecto:
 
-1. Clonar el repositorio
+1. Clonar el repositorio.
 ```bash
 git clone <URL_REPOSITORIO>
 ```
 
-2. Entrar a la carpeta del backend
+2. Entrar a la carpeta del backend.
 ```bash
 cd frontend
 ```
 
-3. Usar el archivo `.env.example` para agregar las variables de entorno y luego renombrar al archivo a `.env`
+3. Usar el archivo `.env.example` para agregar las variables de entorno y luego renombrar al archivo a `.env`.
 
-4. Instalar dependecias
+- Dato extra: si quiere conectar el frontend con el backend de manera local solo tiene que colocar en el archivo `.env` esta URL:
+
+  ```bash
+  # ===========================================
+  # BACKEND URL
+  # ===========================================
+  VITE_BASE_URL=http://localhost:3000
+  ```
++ **Asegurese de haber levantado antes el backend de manera local**
+
+4. Instalar dependecias.
 ```bash
 npm i
 ```
 
-5. Correr el Front
+5. Correr el Front.
 ```bash
 npm run dev
 ```

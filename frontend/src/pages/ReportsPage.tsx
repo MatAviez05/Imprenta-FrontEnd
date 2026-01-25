@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom'; 
 import { useAuth } from '../context/AuthContext'; 
 import '../pages/css/ReportsPage.css'; 
@@ -77,8 +77,8 @@ function ReportsPage() {
 
         const mapaEstados: Record<string, string> = {
             'Pendiente': '#f0ad4e',
-            'En Producción': '#007bff',
-            'Finalizado': '#5cb85c',
+            'En Proceso': '#007bff',
+            'Terminado': '#5cb85c',
             'Entregado': '#343a40'
         };
 
@@ -134,7 +134,7 @@ function ReportsPage() {
                     <h2>Imprenta - Modulo de Reportes</h2>
                     <div className="navbar-right">
                         <Link to="/" className="btn-back">
-                            Volver a HomePage
+                            Volver a Menu
                         </Link>
                         <button onClick={handleLogout} className="btn-logout">
                             Cerrar Sesión
